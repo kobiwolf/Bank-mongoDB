@@ -10,6 +10,7 @@ function App() {
       <button
         onClick={async () => {
           const users = await axios.get(endpoint);
+          console.log(process.env.NODE_ENV);
           setUsers(JSON.stringify(users));
         }}
       >
