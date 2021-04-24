@@ -11,6 +11,7 @@ function App() {
         onClick={async () => {
           const users = await axios.get(endpoint);
           console.log(process.env.NODE_ENV);
+          console.log(process.env.MONGO);
           setUsers(JSON.stringify(users));
         }}
       >
