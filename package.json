@@ -11,7 +11,7 @@
     "both": "concurrently \"npm run client\" \"npm run server\"",
     "copy": "cp -r client/build server/",
     "build": "npm run build --prefix client && npm run copy",
-    "toheroku": "git add . && git commit -m '%npm_config_first%' && git push heroku master"
+    "toheroku": "git add . && git commit -m %npm_config_first% && git push heroku master"
   },
   "keywords": [],
   "author": "",
