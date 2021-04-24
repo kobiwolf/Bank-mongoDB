@@ -6,7 +6,7 @@ const path =
     : 'mongodb://localhost:27017/bank-api';
 
 //try
-mongoose.connect(`${process.env.MONGO}`, {
+mongoose.connect(path, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true,
