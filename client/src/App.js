@@ -3,7 +3,7 @@ import { useState } from 'react';
 import './App.css';
 const endpoint =
   process.env.NODE_ENV === 'production'
-    ? process.env.MONGO
+    ? 'api/users'
     : 'http://localhost:3001/api/users';
 
 function App() {
