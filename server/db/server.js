@@ -4,7 +4,7 @@ const path =
   process.env.NODE_ENV === 'production'
     ? process.env.MONGO
     : 'mongodb://localhost:27017/bank-api';
-
+//try
 mongoose.connect(process.env.MONGO, {
   useNewUrlParser: true,
   useCreateIndex: true,
