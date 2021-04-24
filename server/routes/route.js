@@ -56,6 +56,7 @@ route.get(`${endPoint}/:id`, async (req, res) => {
 
 // create user
 route.post(endPoint, async (req, res) => {
+  console.log(req.body);
   try {
     const user = await createUser(req.body);
     res.send(`${JSON.stringify(user)} has successfully saved`);
@@ -110,10 +111,10 @@ route.put(`${endPoint}/:id`, async (req, res) => {
 });
 
 // delete user
-route.delete(`${endPoint}/:id`, (req, res) => {
+route.delete(`${endPoint}/:id`, async (req, res) => {
   const { id } = req.params;
   try {
-    const answer = deleteUser(id);
+    const answer = await deleteUser(id);
     res.send(answer);
   } catch (e) {
     res.status(404).send(e.message);
