@@ -1,8 +1,11 @@
 import axios from 'axios';
 import { useState } from 'react';
 import './App.css';
+const endpoint =
+  process.env.NODE_ENV === 'production'
+    ? process.env.MONGO
+    : 'http://localhost:3001/api/users';
 
-const endpoint = 'http://localhost:3001/api/users';
 function App() {
   const [users, setUsers] = useState(null);
   return (
