@@ -15,6 +15,7 @@ function App() {
           const users = await axios.get(endpoint);
           console.log(process.env.NODE_ENV);
           console.log(process.env.MONGO);
+          console.log(users);
           setUsers(JSON.stringify(users));
         }}
       >
