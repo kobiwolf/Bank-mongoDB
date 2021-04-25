@@ -56,7 +56,6 @@ route.get(`${endPoint}/:id`, async (req, res) => {
 
 // create user
 route.post(endPoint, async (req, res) => {
-  console.log(req.body);
   try {
     const user = await createUser(req.body);
     res.send(`${JSON.stringify(user)} has successfully saved`);
