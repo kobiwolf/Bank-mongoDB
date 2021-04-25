@@ -1,15 +1,20 @@
 import React, { useRef } from 'react';
 
 export default function Form({ onclick }) {
-  const ref1 = useRef();
-  const ref2 = useRef();
-  const ref3 = useRef();
+  const refName = useRef();
+  const refPhone = useRef();
+  const refEmail = useRef();
+  const refPassword = useRef();
   return (
-    <form className="ui form" onSubmit={(e) => e.preventDefault()}>
+    <form
+      className="ui form"
+      onSubmit={(e) => e.preventDefault()}
+      style={{ maxWidth: '50%' }}
+    >
       <div className="field">
         <label> Name</label>
         <input
-          ref={ref1}
+          ref={refName}
           type="text"
           name="first-name"
           placeholder="First Name"
@@ -18,16 +23,25 @@ export default function Form({ onclick }) {
       <div className="field">
         <label>phone</label>
         <input
-          ref={ref2}
+          ref={refPhone}
+          type="text"
+          name="last-name"
+          placeholder="phone number"
+        />
+      </div>
+      <div className="field">
+        <label>e-mail</label>
+        <input
+          ref={refEmail}
           type="text"
           name="last-name"
           placeholder="Last Name"
         />
       </div>
       <div className="field">
-        <label>e-mail</label>
+        <label>password</label>
         <input
-          ref={ref3}
+          ref={refPassword}
           type="text"
           name="last-name"
           placeholder="Last Name"
@@ -37,7 +51,12 @@ export default function Form({ onclick }) {
         className="ui button"
         type="submit"
         onClick={() =>
-          onclick(ref1.current.value, ref2.current.value, ref3.current.value)
+          onclick(
+            refName.current.value,
+            refPhone.current.value,
+            refEmail.current.value,
+            refPassword.current.value
+          )
         }
       >
         Submit

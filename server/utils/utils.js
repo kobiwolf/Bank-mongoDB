@@ -19,11 +19,12 @@ const deleteUser = async (id) => {
 };
 const createUser = async (value) => {
   try {
-    const user = new User(value);
+    const user = await new User(value);
     await user.save();
+    console.log(user);
     return user;
   } catch (error) {
-    return error;
+    throw new Error(error);
   }
 };
 const isNum = (value) => {
@@ -60,6 +61,7 @@ const transition = async (from, to, money) => {
 const deposit = async (id, cash) => {
   try {
     const user = await User.findByIdAndUpdate(id, { $inc: { cash } });
+    console.log(user);
     if (user) return `user num:${id}, just got deposit ${cash}$`;
     throw new Error('user not found');
   } catch (e) {
@@ -67,6 +69,7 @@ const deposit = async (id, cash) => {
   }
 };
 const draw = async (id, cash) => {
+  if (cash > 0) cash *= -1;
   try {
     let user = await User.findById(id);
     if (!user) throw new Error('user not found');

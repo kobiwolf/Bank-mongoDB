@@ -1,63 +1,23 @@
-import axios from 'axios';
-import { useRef, useState } from 'react';
-import './App.css';
-import Form from './components/Form';
-const endpoint =
-  process.env.NODE_ENV === 'production'
-    ? '/api/users'
-    : 'http://localhost:3001/api/users';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+
+import Header from './components/Header';
+import DeletePage from './pages/DeletePage';
+import UsersPage from './pages/UsersPage';
+import ActionsPage from './pages/ActionsPage';
+import LoginPage from './pages/LoginPage';
 
 function App() {
-  const [users, setUsers] = useState(null);
-  const [respone, setRespone] = useState(null);
-  const [respone1, setRespone1] = useState(null);
-  const ref1 = useRef();
-  const createUser = async (name, phone, email) => {
-    console.log(name, phone, email);
-    const respone = await axios.post(endpoint, { name, phone, email });
-    setRespone(respone.data);
-  };
   return (
     <div className="App">
-      <button
-        onClick={async () => {
-          const users = await axios.get(endpoint);
-          console.log(users.data);
-          await setUsers(users.data);
-        }}
-      >
-        get all users
-      </button>
-      <Form onclick={createUser} />
-      {users && (
-        <div className="1">
-          {users.map(({ cash, credit, isActive, name, phone, email }) => {
-            return (
-              <>
-                <h2>{name}</h2>
-                <h2>{phone}</h2>
-                <h2>{email}</h2>
-                <h2>{(cash, credit)}</h2>
-                <h2>{isActive}</h2>
-              </>
-            );
-          })}
-        </div>
-      )}
-      {respone && <div>{respone}</div>}
-      <input ref={ref1} type="text" />
-      <button
-        onClick={async () => {
-          const respone2 = await axios.delete(
-            `${endpoint}/${ref1.current.value}`
-          );
-          console.log(respone2);
-          await setRespone1(JSON.stringify(respone2.data));
-        }}
-      >
-        delete user
-      </button>
-      {respone1 && <div>{respone1}</div>}
+      <BrowserRouter>
+        <Header />
+        <Switch>
+          <Route path="/" exact component={LoginPage}></Route>
+          <Route path="/delete" exact component={DeletePage}></Route>
+          <Route path="/users" exact component={UsersPage}></Route>
+          <Route path="/actions" exact component={ActionsPage}></Route>
+        </Switch>
+      </BrowserRouter>
     </div>
   );
 }
