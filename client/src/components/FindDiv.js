@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import endpoint from '../config/path';
+import Card from './Card';
 export default function FindDiv() {
   const [response, setResponse] = useState(null);
   const ref1 = useRef();
@@ -8,11 +9,37 @@ export default function FindDiv() {
   const findUser = async () => {
     try {
       const user = await axios.get(`${endpoint}/${ref1.current.value}`);
-      console.log(user.data);
       setResponse(JSON.stringify(user.data));
     } catch (e) {
       setResponse(e.response.data);
     }
+  };
+  const display = () => {
+    const users = JSON.parse(response);
+    if (!Array.isArray(users))
+      return (
+        <Card
+          cash={users.cash}
+          credit={users.credit}
+          isActive={users.isActive}
+          id={users._id}
+          name={users.name}
+          phone={users.phone}
+        />
+      );
+    return users.map((user, i) => {
+      return (
+        <Card
+          key={i}
+          cash={user.cash}
+          credit={user.credit}
+          isActive={user.isActive}
+          id={user._id}
+          name={user.name}
+          phone={user.phone}
+        />
+      );
+    });
   };
   return (
     <div>
@@ -32,7 +59,7 @@ export default function FindDiv() {
             Submit
           </button>
         </form>
-        {response && <div>{response}</div>}
+        {response && <div>{display()}</div>}
       </>
     </div>
   );
