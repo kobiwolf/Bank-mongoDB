@@ -1,14 +1,10 @@
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import HomePage from './routs/HomePage';
 import Header from './components/Header';
-import UsersPage from './routs/UsersPage';
-import ActionsPage from './routs/ActionsPage';
-
-const endpoint =
-  process.env.NODE_ENV === 'production'
-    ? '/api/users'
-    : 'http://localhost:3000/';
+import DeletePage from './pages/DeletePage';
+import UsersPage from './pages/UsersPage';
+import ActionsPage from './pages/ActionsPage';
+import LoginPage from './pages/LoginPage';
 
 function App() {
   return (
@@ -16,7 +12,8 @@ function App() {
       <BrowserRouter>
         <Header />
         <Switch>
-          <Route path="/" exact component={HomePage}></Route>
+          <Route path="/" exact component={LoginPage}></Route>
+          <Route path="/delete" exact component={DeletePage}></Route>
           <Route path="/users" exact component={UsersPage}></Route>
           <Route path="/actions" exact component={ActionsPage}></Route>
         </Switch>

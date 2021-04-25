@@ -26,26 +26,25 @@ route.get(endPoint, async (req, res) => {
 });
 
 // get users by filter
-route.get(`${endPoint}/filter/`, (req, res) => {
+route.get(`${endPoint}/filter/`, async (req, res) => {
   let { amount } = req.query;
   if (!amount && amount !== 0)
     res.status(404).send('no filter params as been given');
   try {
     amount = isNum(amount);
-    const data = getData();
-    const filteredData = data.filter(
-      (user) => user.isActive === 'true' && user.money === amount
-    );
-    filteredData.length
-      ? res.send(filteredData)
+    const data = await User.find({ cash: amount });
+    console.log(data);
+    data.length
+      ? res.send(data)
       : res.send('can not find any users matching your filter ');
   } catch (e) {
-    res.send(e.message);
+    res.status(400).send(e.message);
   }
 });
 // get one user
 route.get(`${endPoint}/:id`, async (req, res) => {
   const { id } = req.params;
+  if (id.length !== 24) res.status(400).end('must put a valid id ');
   try {
     const answer = await User.findById(id);
     answer ? res.send(answer) : res.status(404).send('user not found');
@@ -66,8 +65,6 @@ route.post(endPoint, async (req, res) => {
 // transition
 route.post(`${endPoint}/transfer/`, async (req, res) => {
   const { from, to, amount } = req.query;
-  if (!from || !to || !amount)
-    res.status(400).end('At least one of the queries is missing');
   try {
     const fromUser = await User.findById(from);
     const toUser = await User.findById(to);
@@ -88,7 +85,7 @@ route.post(`${endPoint}/active/:id`, (req, res) => {
     picked.isActive = 'true';
     console.log(picked);
     updateUser(picked, id);
-    res.send(`user num:${picked.id} has been actived`);
+    res.send(`user num:${picked.id} has been activated`);
   } else res.status(400).send('can not find user');
 });
 // user credit and money change
@@ -112,6 +109,7 @@ route.put(`${endPoint}/:id`, async (req, res) => {
 // delete user
 route.delete(`${endPoint}/:id`, async (req, res) => {
   const { id } = req.params;
+  if (!id) res.status(400).end('must put an id');
   try {
     const answer = await deleteUser(id);
     res.send(answer);
@@ -119,5 +117,6 @@ route.delete(`${endPoint}/:id`, async (req, res) => {
     res.status(404).send(e.message);
   }
 });
+route.delete('*', (req, res) => res.status(404).end('you must out an id'));
 
 module.exports = route;

@@ -3,8 +3,11 @@ import { Link } from 'react-router-dom';
 
 export default function Header() {
   return (
-    <div className="ui three item menu">
-      <Link to="/" className="active item">
+    <div className="ui four item menu">
+      <Link to="/" className=" item">
+        login
+      </Link>
+      <Link to="/delete" className=" item">
         delete
       </Link>
       <Link to="/users" className="item">

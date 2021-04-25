@@ -1,22 +1,23 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
+import endpoint from '../config/path';
 
 export default function UpdateDiv({ value }) {
   const [response, setResponse] = useState(null);
-  const ref1 = useRef();
-  const ref2 = useRef();
-  const endpoint =
-    process.env.NODE_ENV === 'production'
-      ? '/api/users'
-      : 'http://localhost:3001/api/users';
+  const refId = useRef();
+  const refAmount = useRef();
+
   const updateUser = async () => {
+    if (refId.current.value.length !== 24)
+      return await setResponse('must put vaild id');
     try {
       const user = await axios.put(
-        `${endpoint}/${ref1.current.value}?${value}=${ref2.current.value}`
+        `${endpoint}/${refId.current.value}?${value}=${refAmount.current.value}`
       );
+      if (!user) return setResponse('can not find user');
       setResponse(user.data);
     } catch (e) {
-      setResponse(e.response.data);
+      setResponse(e.response?.data || e.message);
     }
   };
   return (
@@ -29,11 +30,16 @@ export default function UpdateDiv({ value }) {
       >
         <div className="field">
           <label> id</label>
-          <input ref={ref1} type="text" name="id" placeholder="id" />
+          <input ref={refId} type="text" name="id" placeholder="id" />
         </div>
         <div className="field">
           <label>amount</label>
-          <input ref={ref2} type="text" name="amount" placeholder="amount" />
+          <input
+            ref={refAmount}
+            type="text"
+            name="amount"
+            placeholder="amount"
+          />
         </div>
         <button className="ui button" onClick={() => updateUser()}>
           Submit

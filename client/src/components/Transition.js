@@ -1,23 +1,26 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
-
+import endpoint from '../config/path';
 export default function Transition() {
-  const ref1 = useRef();
-  const ref2 = useRef();
-  const ref3 = useRef();
-  const [respone, setRespone] = useState(null);
-  const endpoint =
-    process.env.NODE_ENV === 'production'
-      ? '/api/users'
-      : 'http://localhost:3001/api/users';
+  const refFrom = useRef();
+  const refTo = useRef();
+  const refAmount = useRef();
+  const [response, setResponse] = useState(null);
+
   const transition = async () => {
+    if (
+      !refFrom.current.value ||
+      !refTo.current.value ||
+      !refAmount.current.value
+    )
+      return setResponse('You must fill all the queries');
     try {
       const response = await axios.post(
-        `${endpoint}/transfer/?from=${ref1.current.value}&to=${ref2.current.value}&amount=${ref3.current.value}`
+        `${endpoint}/transfer/?from=${refFrom.current.value}&to=${refTo.current.value}&amount=${refAmount.current.value}`
       );
-      setRespone(response.data);
+      setResponse(response.data);
     } catch (e) {
-      setRespone(e.response.data);
+      setResponse(e.response.data);
     }
   };
   return (
@@ -29,16 +32,21 @@ export default function Transition() {
         style={{ maxWidth: '50%' }}
       >
         <div className="field">
-          <label> form id</label>
-          <input ref={ref1} type="text" name="id" placeholder="id" />
+          <label> from id</label>
+          <input ref={refFrom} type="text" name="id" placeholder="id" />
         </div>
         <div className="field">
           <label>to</label>
-          <input ref={ref2} type="text" name="id1" placeholder="id" />
+          <input ref={refTo} type="text" name="id1" placeholder="id" />
         </div>
         <div className="field">
           <label>amount</label>
-          <input ref={ref3} type="text" name="amount" placeholder="amount" />
+          <input
+            ref={refAmount}
+            type="text"
+            name="amount"
+            placeholder="amount"
+          />
         </div>
 
         <button
@@ -46,16 +54,16 @@ export default function Transition() {
           type="submit"
           onClick={() =>
             transition(
-              ref1.current.value,
-              ref2.current.value,
-              ref3.current.value
+              refFrom.current.value,
+              refTo.current.value,
+              refAmount.current.value
             )
           }
         >
           Submit
         </button>
       </form>
-      {respone && <div>{respone}</div>}
+      {response && <div>{response}</div>}
     </div>
   );
 }

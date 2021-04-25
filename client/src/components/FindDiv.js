@@ -1,12 +1,10 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
+import endpoint from '../config/path';
 export default function FindDiv() {
   const [response, setResponse] = useState(null);
   const ref1 = useRef();
-  const endpoint =
-    process.env.NODE_ENV === 'production'
-      ? '/api/users'
-      : 'http://localhost:3001/api/users';
+
   const findUser = async () => {
     try {
       const user = await axios.get(`${endpoint}/${ref1.current.value}`);
@@ -19,7 +17,7 @@ export default function FindDiv() {
   return (
     <div>
       <>
-        <h2>find a user</h2>
+        <h2>find a user(in order to get all users,press submit</h2>
         <form
           className="ui form"
           onSubmit={(e) => e.preventDefault()}

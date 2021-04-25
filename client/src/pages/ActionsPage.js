@@ -1,16 +1,14 @@
 import React from 'react';
 import Form from '../components/Form';
 import axios from 'axios';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import UpdateDiv from '../components/UpdateDiv';
 import Transition from '../components/Transition';
+import endpoint from '../config/path';
 
 export default function ActionsPage() {
   const [respone, setRespone] = useState(null);
-  const endpoint =
-    process.env.NODE_ENV === 'production'
-      ? '/api/users'
-      : 'http://localhost:3001/api/users';
+
   const createUser = async (name, phone, email, password) => {
     try {
       const respone = await axios.post(endpoint, {
