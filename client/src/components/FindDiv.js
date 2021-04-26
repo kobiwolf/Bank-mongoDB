@@ -11,6 +11,7 @@ export default function FindDiv() {
       const user = await axios.get(`${endpoint}/${ref1.current.value}`);
       setResponse(JSON.stringify(user.data));
     } catch (e) {
+      console.log(e);
       setResponse(e.response.data);
     }
   };
