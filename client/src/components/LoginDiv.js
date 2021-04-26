@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 import { useRef, useState } from 'react';
 import endpoint from '../config/path';
 
-export default function LoginDiv({ setSigned }) {
+export default function LoginDiv({ setSigned, setUser }) {
   const [respone, setRespone] = useState(null);
   const refId = useRef();
   const refPassword = useRef();
@@ -12,9 +12,12 @@ export default function LoginDiv({ setSigned }) {
     if (!refId.current.value) return setRespone('must put a vaild id');
     try {
       const { data } = await axios.get(`${endpoint}/${refId.current.value}`);
-      if (await bcrypt.compare(refPassword.current.value, data.password))
+      if (await bcrypt.compare(refPassword.current.value, data.password)) {
+        setUser(data);
         return setRespone('connation is made!!');
-      else setRespone('unable to connect-your problam!');
+      } else {
+        await setRespone('unable to connect-your problam!');
+      }
     } catch (e) {
       console.dir(e);
       setRespone(e.response.data);

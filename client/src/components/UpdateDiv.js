@@ -14,9 +14,10 @@ export default function UpdateDiv({ value }) {
       const user = await axios.put(
         `${endpoint}/${refId.current.value}?${value}=${refAmount.current.value}`
       );
-      if (!user) return setResponse('can not find user');
+      if (!user.data) return setResponse('can not find user');
       setResponse(user.data);
     } catch (e) {
+      console.dir(e);
       setResponse(e.response?.data || e.message);
     }
   };

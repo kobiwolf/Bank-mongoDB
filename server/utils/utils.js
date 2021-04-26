@@ -1,4 +1,5 @@
 const User = require('../model/user');
+
 const Transfer = require('../model/Transfer');
 
 const getData = async (amount = null) => {
@@ -21,7 +22,6 @@ const createUser = async (value) => {
   try {
     const user = await new User(value);
     await user.save();
-    console.log(user);
     return user;
   } catch (error) {
     throw new Error(error);

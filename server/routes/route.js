@@ -1,4 +1,5 @@
 const express = require('express');
+const auth = require('../middleWare/auth');
 const User = require('../model/user');
 
 const {
@@ -16,7 +17,7 @@ const route = new express.Router();
 const endPoint = '/api/users';
 
 // get all users
-route.get(endPoint, async (req, res) => {
+route.get(endPoint, auth, async (req, res) => {
   try {
     const data = await getData();
     res.send(data);
@@ -44,7 +45,7 @@ route.get(`${endPoint}/filter/`, async (req, res) => {
 // get one user
 route.get(`${endPoint}/:id`, async (req, res) => {
   const { id } = req.params;
-  if (id.length !== 24) res.status(400).end('must put a valid id ');
+  if (id.length !== 24) return res.status(400).send('must put a valid id ');
   try {
     const answer = await User.findById(id);
     answer ? res.send(answer) : res.status(404).send('user not found');
@@ -57,7 +58,7 @@ route.get(`${endPoint}/:id`, async (req, res) => {
 route.post(endPoint, async (req, res) => {
   try {
     const user = await createUser(req.body);
-    res.send(`${JSON.stringify(user)} has successfully saved`);
+    res.send(user);
   } catch (e) {
     res.status(400).send(e.message);
   }
@@ -96,6 +97,7 @@ route.put(`${endPoint}/:id`, async (req, res) => {
   amount = parseInt(amount);
   let answer;
   try {
+    if (!(await User.findById(id))) throw new Error('can not find user');
     if (credit && !amount) answer = await upDateCredit(id, credit);
     else if (!credit && amount) answer = await moneyAction(id, amount);
     answer
