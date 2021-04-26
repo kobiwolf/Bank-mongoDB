@@ -5,14 +5,25 @@ import Card from './Card';
 export default function FindDiv() {
   const [response, setResponse] = useState(null);
   const ref1 = useRef();
+  const headers = {
+    headers: { auth: 'token' },
+  };
 
   const findUser = async () => {
     try {
-      const user = await axios.get(`${endpoint}/${ref1.current.value}`);
-      setResponse(JSON.stringify(user.data));
+      let answer;
+      if (!ref1.current.value) {
+        answer = await axios.get(`${endpoint}/`, headers);
+        const filterData = answer.data.map((user) => user._doc);
+        await setResponse(JSON.stringify(filterData));
+      } else {
+        answer = await axios.get(`${endpoint}/${ref1.current.value}`, headers);
+        setResponse(answer);
+      }
     } catch (e) {
-      console.log(e);
-      setResponse(e.response.data);
+      console.dir(e.response.data);
+      const w = e.response.data;
+      setResponse(e.message);
     }
   };
   const display = () => {
@@ -45,7 +56,7 @@ export default function FindDiv() {
   return (
     <div>
       <>
-        <h2>find a user(in order to get all users,press submit</h2>
+        <h2>find a user(in order to get all users,press submit)</h2>
         <form
           className="ui form"
           onSubmit={(e) => e.preventDefault()}

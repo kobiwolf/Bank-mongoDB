@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -39,14 +40,26 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  tokens: [
+    {
+      token: {
+        type: String,
+      },
+    },
+  ],
 });
 UserSchema.pre('save', async function (next) {
+  this.token = await jwt.sign({ id: this._id }, 'password');
   this.password = await bcrypt.hash(this.password, 7);
   next();
 });
-UserSchema.statics.kobi = () => {
-  console.log('kobi');
+UserSchema.methods.toJSON = function () {
+  const filterUser = this;
+  delete filterUser.password;
+  delete filterUser.tokens;
+  return filterUser;
 };
+
 const User = mongoose.model('User', UserSchema);
 
 module.exports = User;

@@ -4,19 +4,27 @@ import axios from 'axios';
 import { useState } from 'react';
 import endpoint from '../config/path';
 
-export default function CreateDiv({ setSigned }) {
+export default function CreateDiv({ setSigned, setUser }) {
   const [respone, setRespone] = useState(null);
 
   const createUser = async (name, phone, email, password) => {
     try {
-      const respone = await axios.post(endpoint, {
-        name,
-        phone,
-        email,
-        password,
-      });
+      const respone = await axios.post(
+        endpoint,
+        {
+          name,
+          phone,
+          email,
+          password,
+        },
+        {
+          headers: { auth: 'token' },
+        }
+      );
+      setUser(respone.data);
       setRespone(respone.data);
     } catch (e) {
+      console.dir(e);
       setRespone(e.response.data);
     }
   };
