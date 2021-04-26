@@ -5,7 +5,7 @@ export default function Header() {
   return (
     <div className="ui four item menu">
       <Link to="/" className=" item">
-        login
+        Home
       </Link>
       <Link to="/delete" className=" item">
         delete

@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 import { useRef, useState } from 'react';
 import endpoint from '../config/path';
 
-export default function LoginDiv() {
+export default function LoginDiv({ setSigned }) {
   const [respone, setRespone] = useState(null);
   const refId = useRef();
   const refPassword = useRef();
@@ -47,6 +47,7 @@ export default function LoginDiv() {
         </button>
       </form>
       {respone && <div>{respone}</div>}
+      <button onClick={() => setSigned(false)}>new here?</button>
     </>
   );
 }
