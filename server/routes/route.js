@@ -58,7 +58,7 @@ route.get(`${endPoint}/:id`, async (req, res) => {
 route.post(endPoint, async (req, res) => {
   try {
     const user = await createUser(req.body);
-    res.send(`${JSON.stringify(user)} has successfully saved`);
+    res.send(user);
   } catch (e) {
     res.status(400).send(e.message);
   }
@@ -97,6 +97,7 @@ route.put(`${endPoint}/:id`, async (req, res) => {
   amount = parseInt(amount);
   let answer;
   try {
+    if (!(await User.findById(id))) throw new Error('can not find user');
     if (credit && !amount) answer = await upDateCredit(id, credit);
     else if (!credit && amount) answer = await moneyAction(id, amount);
     answer

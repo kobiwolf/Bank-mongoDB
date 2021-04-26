@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const lodash = require('lodash');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -49,14 +50,17 @@ const UserSchema = new mongoose.Schema({
   ],
 });
 UserSchema.pre('save', async function (next) {
-  this.token = await jwt.sign({ id: this._id }, 'password');
+  this.tokens.push(await jwt.sign({ id: this._id }, 'password'));
   this.password = await bcrypt.hash(this.password, 7);
   next();
 });
 UserSchema.methods.toJSON = function () {
-  const filterUser = this;
-  delete filterUser.password;
-  delete filterUser.tokens;
+  //i wanted to copy this into copy of it,but it's only reference and if i delete password or tokens it won't delete
+  const allowedKeys = Object.keys(this._doc).filter(
+    (key) => key !== 'password' && key !== 'tokens'
+  );
+  let filterUser = {};
+  allowedKeys.forEach((key) => (filterUser[key] = this[key]));
   return filterUser;
 };
 

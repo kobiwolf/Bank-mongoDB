@@ -10,7 +10,6 @@ const auth = async (req, res, next) => {
   // } catch (e) {
   //   res.status(400).send('bad auth');
   // }
-  console.log('i am from auth');
   next();
 };
 module.exports = auth;

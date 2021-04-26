@@ -22,9 +22,8 @@ export default function CreateDiv({ setSigned, setUser }) {
         }
       );
       setUser(respone.data);
-      setRespone(respone.data);
+      setRespone('USER HAS SAVED AND LOGGED IN');
     } catch (e) {
-      console.dir(e);
       setRespone(e.response.data);
     }
   };

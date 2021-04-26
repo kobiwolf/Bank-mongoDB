@@ -14,32 +14,31 @@ export default function FindDiv() {
       let answer;
       if (!ref1.current.value) {
         answer = await axios.get(`${endpoint}/`, headers);
-        const filterData = answer.data.map((user) => user._doc);
-        await setResponse(JSON.stringify(filterData));
+        await setResponse(answer.data);
       } else {
         answer = await axios.get(`${endpoint}/${ref1.current.value}`, headers);
-        setResponse(answer);
+        setResponse(answer.data);
       }
     } catch (e) {
-      console.dir(e.response.data);
-      const w = e.response.data;
-      setResponse(e.message);
+      console.dir(e);
+      setResponse(e.response.data);
     }
   };
   const display = () => {
-    const users = JSON.parse(response);
-    if (!Array.isArray(users))
+    if (typeof response === 'string') return <h4>{response}</h4>;
+
+    if (!Array.isArray(response))
       return (
         <Card
-          cash={users.cash}
-          credit={users.credit}
-          isActive={users.isActive}
-          id={users._id}
-          name={users.name}
-          phone={users.phone}
+          cash={response.cash}
+          credit={response.credit}
+          isActive={response.isActive}
+          id={response._id}
+          name={response.name}
+          phone={response.phone}
         />
       );
-    return users.map((user, i) => {
+    return response.map((user, i) => {
       return (
         <Card
           key={i}
